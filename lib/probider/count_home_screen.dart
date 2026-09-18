@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/probider/count_display_screen.dart';
-import 'package:flutter_practice/probider/model.dart';
+import 'package:flutter_practice/probider/count_home_comsumer.dart';
+import 'package:flutter_practice/probider/model/model.dart';
 import 'package:provider/provider.dart';
 
 class CountHomeScreen extends StatefulWidget {
@@ -25,26 +26,48 @@ class _CountHomeScreenState extends State<CountHomeScreen> {
               context.watch<Counter>().count.toString(),
               style: TextStyle(fontSize: 30),
             ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<Counter>().decrement();
-              },
-              child: Text("decrement"),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<Counter>().decrement();
+                  },
+                  child: Text("decrement"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<Counter>().reset();
+                  },
+                  child: Text("reset"),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<Counter>().reset();
-              },
-              child: Text("reset"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CountDisplayScreen()),
-                );
-              },
-              child: Text("Next Page"),
+
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CountDisplayScreen(),
+                      ),
+                    );
+                  },
+                  child: Text("Next Page"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CountHomeComsumer(),
+                      ),
+                    );
+                  },
+                  child: Text("Consumer Page"),
+                ),
+              ],
             ),
             ElevatedButton(
               onPressed: () {
