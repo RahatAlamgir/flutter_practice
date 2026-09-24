@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/local_storage/share_preference/task_probider.dart';
+import 'package:flutter_practice/local_storage/share_preference/widget/task_card.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_practice/local_storage/share_preference/add_task_screen.dart';
 import 'package:flutter_practice/local_storage/task_model.dart';
@@ -12,47 +13,60 @@ class TaskHomeScreen extends StatefulWidget {
 }
 
 class _TaskHomeScreenState extends State<TaskHomeScreen> {
+  final searchController = TextEditingController();
+
+  final searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Home")),
-      body: Consumer<TaskProvider>(
-        builder: (context, taskProvider, _) {
-          final tasks = taskProvider.tasks;
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Consumer<TaskProvider>(
+          builder: (context, taskProvider, _) {
+            final tasks = taskProvider.filteredTasks;
 
-          if (tasks.isEmpty) {
-            return const Center(child: Text("No tasks found. Add some!"));
-          }
+            return Column(
+              children: [
+                TextField(
+                  controller: searchController,
+                  focusNode: searchFocusNode,
+                  autofocus: false,
+                  onChanged: (value) {
+                    taskProvider.updateSearchQuery(value);
+                  },
+                  onTapOutside: (event) => searchFocusNode.unfocus(),
 
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              TaskModel task = tasks[index];
-              return ListTile(
-                title: Text("${index + 1}. ${task.title}"),
-                subtitle: Text(task.description ?? ''),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Checkbox(
-                      value: task.isDone,
-                      onChanged: (value) {
-                        context.read<TaskProvider>().toggleTaskStatus(index);
-                      },
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        // Delete task using provider
-                        context.read<TaskProvider>().deleteTask(index);
-                      },
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            },
-          );
-        },
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      TaskModel task = tasks[index];
+                      return TaskCard(task: task);
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -13,16 +13,25 @@ class DetailTaskScreen extends StatefulWidget {
 class _DetailTaskScreenState extends State<DetailTaskScreen> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          spacing: 10,
-          children: [
-            Text(widget._task.title.toString()),
+    return Scaffold(
+      appBar: AppBar(title: Text("Task Details")),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            spacing: 10,
+            children: [
+              Row(
+                children: [
+                  Text(widget._task.title.toString()),
 
-            Text(widget._task.description.toString()),
-          ],
+                  if (widget._task.isDone) ...[Icon(Icons.done)],
+                ],
+              ),
+
+              Text(widget._task.description.toString()),
+            ],
+          ),
         ),
       ),
     );
