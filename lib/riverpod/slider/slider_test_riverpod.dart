@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/riverpod/slider/slider_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod/legacy.dart';
-
-class MyAppSlider extends StatelessWidget {
-  const MyAppSlider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ProviderScope(child: MaterialApp(home: SliderTestRiverpod()));
-  }
-}
 
 class SliderTestRiverpod extends ConsumerWidget {
   const SliderTestRiverpod({super.key});
@@ -27,7 +17,7 @@ class SliderTestRiverpod extends ConsumerWidget {
                 double value = ref.watch(
                   sliderProvider.select((state) => state.value),
                 );
-                print("value $value");
+
                 return Container(
                   color: Colors.red.withValues(alpha: value),
                   height: 100,
@@ -40,7 +30,7 @@ class SliderTestRiverpod extends ConsumerWidget {
                 final slidervalue = ref.watch(
                   sliderProvider.select((state) => state.isDone),
                 );
-                print("is Done");
+
                 return Container(
                   color: slidervalue ? Colors.red : Colors.white,
                   height: 100,
@@ -51,7 +41,6 @@ class SliderTestRiverpod extends ConsumerWidget {
                       final sliderisDoneUpadter = ref.read(
                         sliderProvider.notifier,
                       );
-
                       sliderisDoneUpadter.state = sliderisDoneUpadter.state
                           .copyWith(isDone: !slidervalue);
                     },
